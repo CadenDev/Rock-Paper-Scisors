@@ -1,7 +1,33 @@
 let computerScore = 0
 let humanScore = 0
+let humanChoice;
 
-playGame()
+
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+const output = document.querySelector("#output");
+const victorText = document.querySelector("#victorText");
+const computerScoreText = document.querySelector("#computerScore");
+const humanScoreText = document.querySelector("#humanScore");
+
+output.style.border = "2px solid black";
+
+//Event Listeners----------------------------------------------------------------------------------------------------------
+rock.addEventListener("click", () => {
+    humanChoice = "rock";
+    playRound();
+});
+
+paper.addEventListener("click", () => {
+    humanChoice = "paper";
+    playRound();
+});
+
+scissors.addEventListener("click", () => {
+    humanChoice = "scissors";
+    playRound();
+});
 
 
 //Functions-----------------------------------------------------------------------------------------------------------------
@@ -19,46 +45,79 @@ function getComputerChoice() {
     }
 }
 
-function getHumanChoice() {
-    return prompt('Rock, Paper, or Scissors')
-}
 
 function playRound() {
     let computerChoice = getComputerChoice()
-    let humanChoice = getHumanChoice().toLowerCase()
-
+    //Winning the game logic
+    if (humanScore == 5 || computerScore == 5) {
+        return;
+    }
+    
+    //Regular game logic
     if (humanChoice === 'rock' && computerChoice === 'scissors') {
         humanScore++
-        console.log('You win! ' + humanChoice + ' beats ' + computerChoice)
+        victorText.textContent = 'You win! ' + humanChoice + ' beats ' + computerChoice;
+        console.log(humanScore);
     }
     else if (humanChoice === 'paper' && computerChoice === 'rock') {
         humanScore++
-        console.log('You win! ' + humanChoice + ' beats ' + computerChoice)
+        victorText.textContent = 'You win! ' + humanChoice + ' beats ' + computerChoice
+        console.log(humanScore);
 
     }
     else if (humanChoice === 'scissors' && computerChoice === 'paper') {
         humanScore++
-        console.log('You win! ' + humanChoice + ' beats ' + computerChoice)
+        victorText.textContent = 'You win! ' + humanChoice + ' beats ' + computerChoice
+        console.log(humanScore);
     }
     else if (humanChoice === 'rock' && computerChoice === 'paper') {
         computerScore++
-        console.log('You loose. ' + computerChoice + ' beats ' + humanChoice)
+        victorText.textContent = 'You loose. ' + computerChoice + ' beats ' + humanChoice
+        console.log(computerScore);
     }
     else if (humanChoice === 'paper' && computerChoice === 'scissors') {
         computerScore++
-        console.log('You loose. ' + computerChoice + ' beats ' + humanChoice)
+        victorText.textContent = 'You loose. ' + computerChoice + ' beats ' + humanChoice
+        console.log(computerScore);
     }
     else if (humanChoice === 'scissors' && computerChoice === 'rock') {
         computerScore++
-        console.log('You loose. ' + computerChoice + ' beats ' + humanChoice)
+        victorText.textContent = 'You loose. ' + computerChoice + ' beats ' + humanChoice
+        console.log(computerScore);
     }
     else {
+        victorText.textContent = 'It\'s a draw...'
         console.log('It\'s a draw...')
+    }
+    humanChoice = null;
+    if (humanScore == 5 || computerScore == 5) {
+        declareVictor();
+        console.log('This worked');
+        return;
+    }
+
+    updateScore();
+
+}
+
+function updateScore() {
+    computerScoreText.textContent = 'Computer Score: ' + computerScore;
+    humanScoreText.textContent = 'Your Score: ' + humanScore;
+}
+
+function declareVictor() {
+    updateScore();
+    if (computerScore == 5) {
+        victorText.textContent = 'The computer won by getting to 5 points first!';
+    }
+    else if (humanScore == 5) {
+        victorText.textContent = 'You won by getting to 5 points first!';
     }
 }
 
-function playGame() {
-    for (let i = 0; i < 5; i++) {
-        playRound()
-    }
+function reset() {
+    computerScore = 0;
+    humanScore = 0;
+    round = 1;
+    updateScore();
 }
